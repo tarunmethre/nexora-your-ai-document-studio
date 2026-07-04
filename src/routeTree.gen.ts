@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TemplatesRouteImport } from './routes/templates'
 import { Route as StudioRouteImport } from './routes/studio'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PricingRouteImport } from './routes/pricing'
@@ -31,6 +32,11 @@ const TemplatesRoute = TemplatesRouteImport.update({
 const StudioRoute = StudioRouteImport.update({
   id: '/studio',
   path: '/studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResourcesRoute = ResourcesRouteImport.update({
@@ -99,6 +105,7 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/profile': typeof ProfileRoute
   '/resources': typeof ResourcesRoute
+  '/settings': typeof SettingsRoute
   '/studio': typeof StudioRoute
   '/templates': typeof TemplatesRoute
   '/auth/signin': typeof AuthSigninRoute
@@ -114,6 +121,7 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/profile': typeof ProfileRoute
   '/resources': typeof ResourcesRoute
+  '/settings': typeof SettingsRoute
   '/studio': typeof StudioRoute
   '/templates': typeof TemplatesRoute
   '/auth/signin': typeof AuthSigninRoute
@@ -130,6 +138,7 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/profile': typeof ProfileRoute
   '/resources': typeof ResourcesRoute
+  '/settings': typeof SettingsRoute
   '/studio': typeof StudioRoute
   '/templates': typeof TemplatesRoute
   '/auth/signin': typeof AuthSigninRoute
@@ -147,6 +156,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/profile'
     | '/resources'
+    | '/settings'
     | '/studio'
     | '/templates'
     | '/auth/signin'
@@ -162,6 +172,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/profile'
     | '/resources'
+    | '/settings'
     | '/studio'
     | '/templates'
     | '/auth/signin'
@@ -177,6 +188,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/profile'
     | '/resources'
+    | '/settings'
     | '/studio'
     | '/templates'
     | '/auth/signin'
@@ -193,6 +205,7 @@ export interface RootRouteChildren {
   PricingRoute: typeof PricingRoute
   ProfileRoute: typeof ProfileRoute
   ResourcesRoute: typeof ResourcesRoute
+  SettingsRoute: typeof SettingsRoute
   StudioRoute: typeof StudioRoute
   TemplatesRoute: typeof TemplatesRoute
   AuthSigninRoute: typeof AuthSigninRoute
@@ -213,6 +226,13 @@ declare module '@tanstack/react-router' {
       path: '/studio'
       fullPath: '/studio'
       preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/resources': {
@@ -305,6 +325,7 @@ const rootRouteChildren: RootRouteChildren = {
   PricingRoute: PricingRoute,
   ProfileRoute: ProfileRoute,
   ResourcesRoute: ResourcesRoute,
+  SettingsRoute: SettingsRoute,
   StudioRoute: StudioRoute,
   TemplatesRoute: TemplatesRoute,
   AuthSigninRoute: AuthSigninRoute,
