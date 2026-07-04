@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TemplatesRouteImport } from './routes/templates'
 import { Route as StudioRouteImport } from './routes/studio'
 import { Route as ResourcesRouteImport } from './routes/resources'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as IndustriesRouteImport } from './routes/industries'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
@@ -35,6 +36,11 @@ const StudioRoute = StudioRouteImport.update({
 const ResourcesRoute = ResourcesRouteImport.update({
   id: '/resources',
   path: '/resources',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -91,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/how-it-works': typeof HowItWorksRoute
   '/industries': typeof IndustriesRoute
   '/pricing': typeof PricingRoute
+  '/profile': typeof ProfileRoute
   '/resources': typeof ResourcesRoute
   '/studio': typeof StudioRoute
   '/templates': typeof TemplatesRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByTo {
   '/how-it-works': typeof HowItWorksRoute
   '/industries': typeof IndustriesRoute
   '/pricing': typeof PricingRoute
+  '/profile': typeof ProfileRoute
   '/resources': typeof ResourcesRoute
   '/studio': typeof StudioRoute
   '/templates': typeof TemplatesRoute
@@ -120,6 +128,7 @@ export interface FileRoutesById {
   '/how-it-works': typeof HowItWorksRoute
   '/industries': typeof IndustriesRoute
   '/pricing': typeof PricingRoute
+  '/profile': typeof ProfileRoute
   '/resources': typeof ResourcesRoute
   '/studio': typeof StudioRoute
   '/templates': typeof TemplatesRoute
@@ -136,6 +145,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/industries'
     | '/pricing'
+    | '/profile'
     | '/resources'
     | '/studio'
     | '/templates'
@@ -150,6 +160,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/industries'
     | '/pricing'
+    | '/profile'
     | '/resources'
     | '/studio'
     | '/templates'
@@ -164,6 +175,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/industries'
     | '/pricing'
+    | '/profile'
     | '/resources'
     | '/studio'
     | '/templates'
@@ -179,6 +191,7 @@ export interface RootRouteChildren {
   HowItWorksRoute: typeof HowItWorksRoute
   IndustriesRoute: typeof IndustriesRoute
   PricingRoute: typeof PricingRoute
+  ProfileRoute: typeof ProfileRoute
   ResourcesRoute: typeof ResourcesRoute
   StudioRoute: typeof StudioRoute
   TemplatesRoute: typeof TemplatesRoute
@@ -207,6 +220,13 @@ declare module '@tanstack/react-router' {
       path: '/resources'
       fullPath: '/resources'
       preLoaderRoute: typeof ResourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -283,6 +303,7 @@ const rootRouteChildren: RootRouteChildren = {
   HowItWorksRoute: HowItWorksRoute,
   IndustriesRoute: IndustriesRoute,
   PricingRoute: PricingRoute,
+  ProfileRoute: ProfileRoute,
   ResourcesRoute: ResourcesRoute,
   StudioRoute: StudioRoute,
   TemplatesRoute: TemplatesRoute,
