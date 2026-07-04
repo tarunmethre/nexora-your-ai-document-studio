@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TemplatesRouteImport } from './routes/templates'
+import { Route as StudioRouteImport } from './routes/studio'
 import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as IndustriesRouteImport } from './routes/industries'
@@ -20,6 +21,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const TemplatesRoute = TemplatesRouteImport.update({
   id: '/templates',
   path: '/templates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudioRoute = StudioRouteImport.update({
+  id: '/studio',
+  path: '/studio',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResourcesRoute = ResourcesRouteImport.update({
@@ -60,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/industries': typeof IndustriesRoute
   '/pricing': typeof PricingRoute
   '/resources': typeof ResourcesRoute
+  '/studio': typeof StudioRoute
   '/templates': typeof TemplatesRoute
 }
 export interface FileRoutesByTo {
@@ -69,6 +76,7 @@ export interface FileRoutesByTo {
   '/industries': typeof IndustriesRoute
   '/pricing': typeof PricingRoute
   '/resources': typeof ResourcesRoute
+  '/studio': typeof StudioRoute
   '/templates': typeof TemplatesRoute
 }
 export interface FileRoutesById {
@@ -79,6 +87,7 @@ export interface FileRoutesById {
   '/industries': typeof IndustriesRoute
   '/pricing': typeof PricingRoute
   '/resources': typeof ResourcesRoute
+  '/studio': typeof StudioRoute
   '/templates': typeof TemplatesRoute
 }
 export interface FileRouteTypes {
@@ -90,6 +99,7 @@ export interface FileRouteTypes {
     | '/industries'
     | '/pricing'
     | '/resources'
+    | '/studio'
     | '/templates'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -99,6 +109,7 @@ export interface FileRouteTypes {
     | '/industries'
     | '/pricing'
     | '/resources'
+    | '/studio'
     | '/templates'
   id:
     | '__root__'
@@ -108,6 +119,7 @@ export interface FileRouteTypes {
     | '/industries'
     | '/pricing'
     | '/resources'
+    | '/studio'
     | '/templates'
   fileRoutesById: FileRoutesById
 }
@@ -118,6 +130,7 @@ export interface RootRouteChildren {
   IndustriesRoute: typeof IndustriesRoute
   PricingRoute: typeof PricingRoute
   ResourcesRoute: typeof ResourcesRoute
+  StudioRoute: typeof StudioRoute
   TemplatesRoute: typeof TemplatesRoute
 }
 
@@ -128,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/templates'
       fullPath: '/templates'
       preLoaderRoute: typeof TemplatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/resources': {
@@ -182,6 +202,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndustriesRoute: IndustriesRoute,
   PricingRoute: PricingRoute,
   ResourcesRoute: ResourcesRoute,
+  StudioRoute: StudioRoute,
   TemplatesRoute: TemplatesRoute,
 }
 export const routeTree = rootRouteImport
