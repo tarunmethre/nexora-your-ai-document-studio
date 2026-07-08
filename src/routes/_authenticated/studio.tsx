@@ -15,7 +15,7 @@ import { FloatingAI } from "@/components/site/FloatingAI";
 import { Navbar } from "@/components/site/Navbar";
 import { TEMPLATES, TEMPLATE_CATEGORIES } from "@/lib/nexora-data";
 
-export const Route = createFileRoute("/studio")({
+export const Route = createFileRoute("/_authenticated/studio")({
   head: () => ({
     meta: [
       { title: "Studio · Nexora" },
