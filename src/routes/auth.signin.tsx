@@ -1,7 +1,11 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Mail, Sparkles } from "lucide-react";
+import { Loader2, Mail, Sparkles } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
+import { useAuth } from "@/context/AuthContext";
+import { useNavigate, useSearch } from "@tanstack/react-router";
+import { z } from "zod";
 
 export const Route = createFileRoute("/auth/signin")({
   head: () => ({
@@ -11,12 +15,55 @@ export const Route = createFileRoute("/auth/signin")({
       { name: "robots", content: "noindex" },
     ],
   }),
+  validateSearch: (search: Record<string, unknown>) => ({
+    redirect: typeof search.redirect === "string" ? search.redirect : undefined,
+  }),
   component: SignIn,
 });
 
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const { signInWithEmail, signInWithGoogle } = useAuth();
+  const navigate = useNavigate();
+  const { redirect } = useSearch({ from: "/auth/signin" });
+
+  const schema = z.object({
+    email: z.string().email("Enter a valid email"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const parsed = schema.safeParse({ email, password });
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0].message);
+      return;
+    }
+    setSubmitting(true);
+    try {
+      await signInWithEmail(email, password);
+      toast.success("Welcome back");
+      navigate({ to: (redirect as "/dashboard") ?? "/dashboard" });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Sign in failed");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleGoogle = async () => {
+    setGoogleLoading(true);
+    try {
+      await signInWithGoogle();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Google sign in failed");
+      setGoogleLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-background">
       <motion.div
@@ -38,8 +85,17 @@ function SignIn() {
             Sign in to continue composing.
           </p>
 
-          <button className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl border border-border bg-card font-bold hover:bg-surface transition-colors mb-3">
-            <span className="size-5 rounded-full bg-gradient-to-tr from-amber-500 via-rose-500 to-blue-500" />
+          <button
+            type="button"
+            onClick={handleGoogle}
+            disabled={googleLoading}
+            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl border border-border bg-card font-bold hover:bg-surface transition-colors mb-3 disabled:opacity-60"
+          >
+            {googleLoading ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <span className="size-5 rounded-full bg-gradient-to-tr from-amber-500 via-rose-500 to-blue-500" />
+            )}
             Continue with Google
           </button>
 
@@ -50,10 +106,7 @@ function SignIn() {
             </span>
           </div>
 
-          <form
-            onSubmit={(e) => e.preventDefault()}
-            className="space-y-3"
-          >
+          <form onSubmit={handleSubmit} className="space-y-3">
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
               <input
@@ -77,11 +130,19 @@ function SignIn() {
               <label className="flex items-center gap-2 text-muted-foreground">
                 <input type="checkbox" className="accent-foreground" /> Remember me
               </label>
-              <a href="#" className="font-mono uppercase tracking-widest text-accent-blue">
+              <Link
+                to="/auth/forgot-password"
+                className="font-mono uppercase tracking-widest text-accent-blue"
+              >
                 Forgot?
-              </a>
+              </Link>
             </div>
-            <button className="w-full py-3.5 rounded-2xl bg-foreground text-background font-bold shadow-xl hover:-translate-y-0.5 transition-transform">
+            <button
+              type="submit"
+              disabled={submitting}
+              className="w-full py-3.5 rounded-2xl bg-foreground text-background font-bold shadow-xl hover:-translate-y-0.5 transition-transform disabled:opacity-60 flex items-center justify-center gap-2"
+            >
+              {submitting && <Loader2 className="size-4 animate-spin" />}
               Sign In
             </button>
           </form>
