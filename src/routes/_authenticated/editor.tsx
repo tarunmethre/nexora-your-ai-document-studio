@@ -14,7 +14,7 @@ import {
 import { useState } from "react";
 import { Navbar } from "@/components/site/Navbar";
 
-export const Route = createFileRoute("/editor")({
+export const Route = createFileRoute("/_authenticated/editor")({
   head: () => ({
     meta: [
       { title: "Editor · Nexora" },
